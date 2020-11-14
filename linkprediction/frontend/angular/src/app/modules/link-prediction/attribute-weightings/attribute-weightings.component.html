@@ -1,0 +1,66 @@
+<div *ngIf="isLoaded" class="container-fluid p-4">
+
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h3 class="text-secondary">Attributes</h3>
+    </div>
+
+    <div class="row p-2">
+        <div class="col p-3">
+            <div class="card shadow">
+
+                <div class="card-header p-2">
+                    <div class="d-flex align-items-center">
+                        <h6 class="font-weight-bold text-uppercase mr-auto">Weightings</h6>
+                        <div class="float-right mr-1">
+                            <span style="color:tomato;" (click)="abortAttributeWeightingsView()">
+                                <i class="fas fa-times fa-lg"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-3 bg-white">
+
+                    <div class="col col-sm-12 col-md-6 col-lg-6">
+                        <form class="form-group" [formGroup]="form" > 
+                          <div *ngFor="let attribute_weighting of attribute_weightings" class="form-row mr-5">
+                            <div class="col">
+                                <div class="form-group" [formGroup]="form">
+                                    <label [attr.for]="attribute_weighting.attribute">{{attribute_weighting.attribute}}</label>
+                                    <input class="form-control" [formControlName]="attribute_weighting.attribute"
+                                              [id]="attribute_weighting.attribute" type="number">                      
+                                    <div class="text-danger" *ngIf="!isValid(attribute_weighting.attribute)">{{attribute_weighting.attribute}} is required.</div>
+                                </div>
+                            </div>
+                          </div>
+                        </form>
+                    </div>
+
+                    <div class="d-sm-flex align-items-center justify-content-between">
+                        <span></span>
+                        <div class="d-sm-inline-block">
+                          <button class="btn btn-success shadow-sm"
+                          type="button"
+                          (click)="saveSettings()"
+                          [disabled]="!form.valid">
+                          <i class="fas fa-save"></i> 
+                          Save</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div *ngIf="!isLoaded" class="wrapper">
+    <div class="overlay" >
+      <div class="spinner-wrapper">
+        <app-loading-spinner></app-loading-spinner>
+        </div>
+    </div>
+</div>

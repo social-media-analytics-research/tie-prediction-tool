@@ -1,0 +1,8 @@
+- Next features (for the next version):
+ - Evaluate pypy and pyston in order to increase velocity
+ - Tweak visualization settings to further increase velocity
+ - Evaluate skorch in order to add deep learning approaches
+ - Facilitate the installation process
+
+- Bugs to resolve:
+  -

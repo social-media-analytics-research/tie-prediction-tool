@@ -1,0 +1,9 @@
+<div>
+    <form class="form-group" [formGroup]="form" > 
+      <div *ngFor="let parameter of parameters" class="form-row mr-5">
+        <div class="col">
+          <app-predictor-parameters [parameter]="parameter" [form]="form"></app-predictor-parameters>
+        </div>
+      </div>
+    </form>
+</div>

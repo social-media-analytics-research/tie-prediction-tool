@@ -1,0 +1,424 @@
+{
+  "nodes": [
+    {
+      "id": "A"
+    },
+    {
+      "id": "B"
+    },
+    {
+      "id": "C"
+    },
+    {
+      "id": "D"
+    },
+    {
+      "id": "G"
+    },
+    {
+      "id": "E"
+    },
+    {
+      "id": "F"
+    }
+  ],
+  "links": [
+    {
+      "source": "A",
+      "target": "B",
+      "edge_color": "#ffff00",
+      "edges": [
+        {
+          "source": "A",
+          "target": "B",
+          "predicted": false
+        },
+        {
+          "source": "B",
+          "target": "A",
+          "predicted": true,
+          "prediction_score": 2,
+          "applied_methods": {
+            "Social Theory": [
+              "social exchange theory",
+              "balance theory.030C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "D",
+      "target": "A",
+      "edge_color": "#ffff00",
+      "edges": [
+        {
+          "source": "D",
+          "target": "A",
+          "predicted": false
+        },
+        {
+          "source": "A",
+          "target": "D",
+          "predicted": true,
+          "prediction_score": 2,
+          "applied_methods": {
+            "Social Theory": [
+              "social exchange theory",
+              "balance theory.030C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "A",
+      "target": "C",
+      "edge_color": "#ff0000",
+      "edges": [
+        {
+          "source": "A",
+          "target": "C",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "balance theory.021C"
+            ]
+          }
+        },
+        {
+          "source": "C",
+          "target": "A",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "balance theory.021C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "G",
+      "target": "A",
+      "edge_color": "#ff0000",
+      "edges": [
+        {
+          "source": "G",
+          "target": "A",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "balance theory.111U"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "B",
+      "target": "D",
+      "edge_color": "#ffff00",
+      "edges": [
+        {
+          "source": "B",
+          "target": "D",
+          "predicted": false
+        },
+        {
+          "source": "D",
+          "target": "B",
+          "predicted": true,
+          "prediction_score": 2,
+          "applied_methods": {
+            "Social Theory": [
+              "social exchange theory",
+              "balance theory.030C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "B",
+      "target": "C",
+      "edge_color": "#ffff00",
+      "edges": [
+        {
+          "source": "B",
+          "target": "C",
+          "predicted": false
+        },
+        {
+          "source": "C",
+          "target": "B",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "social exchange theory"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "B",
+      "target": "F",
+      "edge_color": "#ff0000",
+      "edges": [
+        {
+          "source": "B",
+          "target": "F",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "balance theory.021C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "B",
+      "target": "E",
+      "edge_color": "#ff0000",
+      "edges": [
+        {
+          "source": "B",
+          "target": "E",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "balance theory.021C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "B",
+      "target": "G",
+      "edge_color": "#ff0000",
+      "edges": [
+        {
+          "source": "B",
+          "target": "G",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "balance theory.111D"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "C",
+      "target": "D",
+      "edge_color": "#ffff00",
+      "edges": [
+        {
+          "source": "C",
+          "target": "D",
+          "predicted": false
+        },
+        {
+          "source": "D",
+          "target": "C",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "social exchange theory"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "C",
+      "target": "F",
+      "edge_color": "#ffff00",
+      "edges": [
+        {
+          "source": "C",
+          "target": "F",
+          "predicted": false
+        },
+        {
+          "source": "F",
+          "target": "C",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "social exchange theory"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "C",
+      "target": "E",
+      "edge_color": "#ff0000",
+      "edges": [
+        {
+          "source": "C",
+          "target": "E",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "balance theory.021C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "C",
+      "target": "G",
+      "edge_color": "#ff0000",
+      "edges": [
+        {
+          "source": "C",
+          "target": "G",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "balance theory.111D"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "D",
+      "target": "G",
+      "edge_color": "#ffff00",
+      "edges": [
+        {
+          "source": "D",
+          "target": "G",
+          "predicted": false
+        },
+        {
+          "source": "G",
+          "target": "D",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "social exchange theory"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "D",
+      "target": "E",
+      "edge_color": "#ffff00",
+      "edges": [
+        {
+          "source": "D",
+          "target": "E",
+          "predicted": false
+        },
+        {
+          "source": "E",
+          "target": "D",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "social exchange theory"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "D",
+      "target": "F",
+      "edge_color": "#ff0000",
+      "edges": [
+        {
+          "source": "D",
+          "target": "F",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "balance theory.021C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "G",
+      "target": "E",
+      "edge_color": "#ff0000",
+      "edges": [
+        {
+          "source": "G",
+          "target": "E",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "balance theory.111U"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "E",
+      "target": "F",
+      "edge_color": "#ffff00",
+      "edges": [
+        {
+          "source": "E",
+          "target": "F",
+          "predicted": false
+        },
+        {
+          "source": "F",
+          "target": "E",
+          "predicted": true,
+          "prediction_score": 1,
+          "applied_methods": {
+            "Social Theory": [
+              "social exchange theory"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "information": {
+    "node_count": 7,
+    "directed_edge_count": 28,
+    "undirected_edge_count": 18,
+    "methods_applied": {
+      "Social Theory": {
+        "social exchange theory": 9,
+        "balance theory.030C": 3,
+        "balance theory.021C": 6,
+        "balance theory.111U": 2,
+        "balance theory.111D": 2
+      }
+    }
+  }
+}

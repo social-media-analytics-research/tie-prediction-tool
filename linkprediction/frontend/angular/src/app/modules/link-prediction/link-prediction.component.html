@@ -1,0 +1,230 @@
+<div *ngIf="isLoaded" class="container-fluid p-4">
+
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h3 class="text-secondary">Link-Prediction Settings</h3>
+    <div class="d-sm-inline-block">
+      <button class="btn btn-danger shadow-sm mr-2"
+              (click)="abortPredictionSettingsView()">
+        <i class="fas fa-arrow-circle-left"></i>
+        Return
+      </button>
+      <button class="btn btn-success shadow-sm"
+              (click)="saveSettings()">
+        <i class="fas fa-save"></i>
+        Save
+      </button>
+    </div>
+  </div>
+
+  <div class="row p-2">
+    <div class="col p-3">
+      <div class="card shadow">
+
+        <div class="card-header p-2">
+          <div class="d-flex align-items-center">
+            <h6 class="font-weight-bold text-uppercase mr-auto">Predictors</h6>
+          </div>
+        </div>
+
+        <div class="card-body p-3 bg-white">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th class="text-center">Parameters</th>
+              <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let predictor of selectedPredictors">
+              <td>{{predictor.designation}}</td>
+              <td>{{predictor.category}}</td>
+              <td class="text-center">{{parametersAvailable(predictor)}}</td>
+              <td class="text-right">
+                <div>
+                  <!-- <button *ngIf="predictor.category == 'ML-Classifier'"
+                  class="btn btn-primary btn-small mr-1"
+                  type="button"
+                  (click)="viewPredictor(predictor)">
+                  <i class="fa fa-eye"></i>
+                  </button> -->
+                  <button class="btn btn-danger btn-small"
+                          type="button"
+                          (click)="deletePredictor(predictor)">
+                    <i class="fa fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="text-right">
+                <button class="btn btn-success ml-auto"
+                        type="button"
+                        (click)="addPredictor()">
+                  <i class="fa fa-plus"></i></button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row p-2">
+
+    <div class="col col-sm-12 col-md-6 col-lg-6 mb-4">
+      <div class="card shadow">
+
+        <div class="card-header p-2">
+          <div class="d-flex align-items-center">
+            <h6 class="font-weight-bold text-uppercase mr-auto">Machine Learning</h6>
+          </div>
+        </div>
+
+        <div class="card-body p-3 bg-white">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+
+                <div class="row">
+                  <div class="col">
+
+                    <div class="form-group">
+                      <label for="classifier_selection" class="font-weight-bold">Classifier</label>
+                      <select id="classifier_selection"
+                              class="form-control"
+                              name="classifier_selection"
+                              [(ngModel)]="selectedClassifier">
+                        <option *ngFor="let classifier of availableClassifiers"
+                                [ngValue]="classifier">{{classifier.designation}}</option>
+                      </select>
+                    </div>
+
+                    <div class="d-sm-flex align-items-center justify-content-between">
+                      <span></span>
+                      <div class="d-sm-inline-block">
+                        <button class="btn btn-success shadow-sm"
+                                [disabled]="selectedPredictors.length == 0"
+                                (click)="createClassifier()">
+                          Create
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col col-sm-12 col-md-6 col-lg-6 mb-4">
+      <div class="card shadow">
+
+        <div class="card-header p-2">
+          <div class="d-flex align-items-center">
+            <h6 class="font-weight-bold text-uppercase mr-auto">Configuration</h6>
+          </div>
+        </div>
+
+        <div class="card-body p-3 bg-white">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <label for="evaluation" class="card-title font-weight-bold">Settings</label>
+
+                <div class="form-group ml-4">
+                  <input id="validation_activation"
+                         class="form-check-input"
+                         type="checkbox"
+                         name="validation_activation"
+                         [checked]="evaluationSetup.with_validation"
+                         (click)="onValidationActivate()">
+                  <label for="validation_activation"
+                         class="form-check-label">Activate Test-Sampling</label>
+                </div>
+
+                <div class="row">
+
+                  <div class="col col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label class="font-weight-bold" for="attribute_weightings">Attribute Weightings</label>
+                      <button class="d-sm-inline-block btn btn-secondary shadow-sm mr-2"
+                              name="attribute_weightings"
+                              (click)="configureAttributeWeightings()">
+                        <i class="fas fa-cogs"></i>
+                        Weightings
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="row">
+
+                  <div class="col col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label for="train_sampling_rate" class="card-title font-weight-bold">Train-Sampling (%)</label>
+                      <div id="train_sampling_rate" class="row">
+                        <div class="col">
+                          <mv-slider
+                            [(value)]="evaluationSetup.train_sampling_ratio"
+                            [min]="0"
+                            [max]="1.0"
+                            [step]="0.01"
+                            [enabled]="true"></mv-slider>
+                          <span class="ml-2 font-weight-bold">{{toPercentage(evaluationSetup.train_sampling_ratio)}}
+                            %</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="evaluationSetup.with_validation" class="col col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label for="test_sampling_rate" class="card-title font-weight-bold">Test-Sampling (%)</label>
+                      <div id="test_sampling_rate" class="row">
+                        <div class="col">
+                          <mv-slider
+                            [(value)]="evaluationSetup.test_sampling_ratio"
+                            [min]="0"
+                            [max]="1.0"
+                            [step]="0.01"
+                            [enabled]="true"></mv-slider>
+                          <span class="ml-2 font-weight-bold">{{toPercentage(evaluationSetup.test_sampling_ratio)}}
+                            %</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="!isLoaded" class="wrapper">
+  <div class="overlay">
+    <div class="spinner-wrapper">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+  </div>
+</div>

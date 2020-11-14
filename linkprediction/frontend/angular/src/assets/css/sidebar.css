@@ -1,0 +1,218 @@
+#sidebarCollapse {
+  width: 37px;
+  height: 37px;
+  /* background: #c84e4e; */
+  right: 15px;
+  top: 15px;
+  cursor: pointer;
+}
+
+#sidebarCollapse span {
+  width: 40px;
+  height: 2px;
+  /* margin: 0 auto; */
+  margin: 5px auto;
+
+  display: block;
+  background: rgb(255, 255, 255);
+  transition: all 0.8s cubic-bezier(0.810, -0.330, 0.345, 1.375);
+  transition-delay: 0.2s;
+}
+
+#sidebarCollapse.active span:first-of-type {
+  transform: translate(1px, 16px) rotate(45deg);
+}
+
+#sidebarCollapse.active span:nth-of-type(2) {
+  transition-delay: 0.0s;
+  opacity: 0;
+}
+
+#sidebarCollapse.active span:last-of-type {
+  transform: translate(1px, 12px) rotate(-45deg);
+}
+
+#sidebarCollapse.active span {
+  transform: none;
+  opacity: 1;
+  /* margin: 5px auto;*/
+  margin: 0 auto;
+}
+
+
+.sidebar.active #sidebar-content {
+  transition: none !important;
+  visibility: visible;
+}
+
+.sidebar #sidebar-content {
+  transition: none !important;
+  visibility: hidden;
+}
+
+
+/* The sidebar menu */
+.sidebar {
+  height: 100%;
+  /* 100% Full-height */
+  width: 65px;
+  /* max-width: 35%; */
+  /* 0 width - change this with JavaScript */
+  position: absolute;
+  /* Stay in place */
+  z-index: 1000;
+  /* Stay on top */
+
+  background-color: rgb(32, 31, 29);
+
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding-top: 60px;
+  transition: 0.5s;
+}
+
+
+.sidebar.active {
+  width: 290px;
+  overflow-y: auto;
+  /* min-width: 290px; */
+}
+
+.simplebar-scrollbar::before {
+  background: gray;
+}
+
+
+#sidebar-content {
+  text-decoration: none;
+  font-size: 14px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+
+/* EDGES */
+#applied-methods {
+  padding-left: 32px;
+}
+
+
+/* GENERAL INFORMATION */
+#general-information-nodes-edges li {
+  padding-left: 0;
+}
+
+#general-information-methods div {
+  margin-top: 12px;
+}
+
+#general-information-methods div li span {
+  display: inline-block;
+  width: 220px;
+}
+
+
+/* CARDS */
+.card {
+  background: inherit;
+  color: #818181;
+  border: none;
+}
+
+.card-header {
+  text-align: left;
+  text-decoration: none;
+  font-size: 21px;
+  padding: 2px 0 0px 15px;
+  display: block;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.sidebar.active .card-header hr {
+  border-top: 1px solid;
+  visibility: visible;
+  width: 90%;
+  padding: 5px 0px 5px 0px;
+  margin: 0;
+}
+
+.sidebar.active .card-header.collapsed hr {
+  visibility: hidden;
+}
+
+
+.card-body {
+  padding: 0;
+}
+
+
+/* Card body content */
+.h7 {
+  color: #818181;
+  font-size: 21px;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+span.first-header {
+  font-size: 18.5px;
+  font-weight: 650;
+}
+
+span.second-header {
+  font-size: 18.5px;
+  font-weight: 600;
+}
+
+ul {
+  font-size: 18px;
+  list-style-type: none;
+  padding-left: 22px;
+  margin-bottom: 5px;
+}
+
+ul li span {
+  display: inline-block;
+  width: 200px;
+  font-weight: 400;
+}
+
+ul li {
+  padding-left: 10px;
+}
+
+.sidebar #close-panel {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  min-height: 30px;
+}
+
+.sidebar div .closebtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  /* font-size: 36px; */
+  margin-left: 50px;
+}
+
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+/* #main {
+     transition: margin-left .5s;
+     padding: 20px;
+ } */
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+/* @media screen and (max-height: 450px) {
+    .sidebar {
+        padding-top: 15px;
+    }
+
+    .sidebar a {
+        font-size: 18px;
+    }
+} */
