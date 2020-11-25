@@ -1,0 +1,2 @@
+- As a quick tweak to substantially increase prediction velocity at the cost of network visualization, replace the file "prediction_worker.py" with "prediction_worker-speed-optimized.py".
+- The new version of this tool will incorporate this tweak via a selector in the dashboard (e.g., "omit network visualization to boost predicition velocity.")

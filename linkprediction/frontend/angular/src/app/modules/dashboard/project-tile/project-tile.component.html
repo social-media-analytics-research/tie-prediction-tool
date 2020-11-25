@@ -1,0 +1,34 @@
+<div *ngIf="isLoaded" class="card shadow h-300">
+
+    <div class="card-header p-2">
+        <div class="d-flex align-items-center">
+            <h6 class="font-weight-bold text-uppercase mr-auto">{{project.designation}}</h6>
+            <div class="float-right mr-1">
+                <!-- <span (click)="editProject()">
+                    <i class="fas fa-edit"></i>
+                </span> -->
+                <span class="ml-2" style="color:tomato;" (click)="deleteProject()">
+                    <i class="fas fa-trash"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body p-2 bg-white" (click)="viewProject()">
+
+        <h6 class="card-title font-weight-bold">Description</h6>
+        <p class="card-text">{{project.description}}</p>
+        
+        <div class="row">
+            <div class="col-6 text-center">
+                <h6 class="font-weight-bold text-primary">Last Prediction</h6>
+                <p class="text-xs test-gray-800 font-weight-bold">{{lastPrediction}}</p>
+            </div>
+            <div class="col-6 text-center">
+                <h6 class="font-weight-bold text-primary">AUC</h6>
+                <p class="text-xs test-gray-800 font-weight-bold">{{highestAUC}}</p>
+            </div>
+        </div>
+    </div>
+
+</div>

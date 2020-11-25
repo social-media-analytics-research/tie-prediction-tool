@@ -1,0 +1,24 @@
+#js_chart {
+  position: absolute;
+  height: 75%;
+  width: 97%;
+  border: 1px solid #201f1d;
+  margin-left: 1.5rem;
+}
+
+
+#float-button-group {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  opacity: 0.2;
+}
+
+#float-button-group:hover {
+  opacity: 0.6;
+}
+
+
+.icon-size {
+  font-size: 30px;
+}

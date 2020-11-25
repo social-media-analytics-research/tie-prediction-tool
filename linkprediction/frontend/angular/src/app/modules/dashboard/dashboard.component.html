@@ -1,0 +1,31 @@
+<div *ngIf="isLoaded" class="container-fluid p-4">
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h3 class="text-secondary">Dashboard</h3>
+    </div>
+
+    <div class="row p-2">
+        
+        <app-project-tile 
+        class="m-1 col-sm-6 col-md-4 col-lg-4" 
+        *ngFor="let project of projects" 
+        [project]='project'
+        (refresh)='refreshDashboard($event)'></app-project-tile>
+
+        <div class="m-1 col-sm-6 col-md-4 col-lg-4">
+            <div class="card add-card h-300">
+                <button class="btn btn-success btn-large m-auto" type="button" (click)="createProject()"><i class="fa fa-plus fa-2x"></i></button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div *ngIf="!isLoaded" class="wrapper">
+    <div class="overlay" >
+      <div class="spinner-wrapper">
+        <app-loading-spinner></app-loading-spinner>
+        </div>
+    </div>
+</div>

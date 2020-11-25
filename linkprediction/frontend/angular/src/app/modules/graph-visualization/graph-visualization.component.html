@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+          integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script> -->
+
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
+
+  <!-- <script src="https://unpkg.com/popper.js@1"></script>
+  <script src="https://unpkg.com/tippy.js@5"></script> -->
+
+</head>
+<body class="height=100%">
+<div class="container-fluid p-4" *ngIf="isLoaded && projectsAvailable">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div>
+      <h3 class="text-secondary">Selected Project</h3>
+      <select id="project_selection"
+      name="project_selection"
+      class="form-control"
+      (change)="updateNetwork()"
+      [(ngModel)]="selectedProject"
+      required>
+        <option *ngFor="let project of projects" [ngValue]="project">{{project.designation}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+<div id='js_chart' *ngIf="isLoaded && projectsAvailable">
+  <div id="mySidebar" class="sidebar" data-simplebar>
+    <div id="close-panel">
+      <a (click)="sidebarCollapse()" class="closebtn" id="sidebarCollapse">
+        <span></span>
+        <span></span>
+        <span></span>
+      </a>
+    </div>
+
+    <div id="sidebar-content">
+      <div id="card-edge-placeholder"></div>
+
+      <div id="general-information-card">
+        <div class="card-header" data-toggle="collapse" data-target="#general-information-card-body"
+             aria-expanded="true" aria-controls="general-information-card-body">
+          <p class="h7">GENERAL INFORMATION</p>
+          <hr>
+        </div>
+
+        <div id="general-information-card-body" class="collapse show card-body">
+
+          <ul id="general-information-nodes-edges">
+            <li>
+              <span>#nodes</span>
+              <span id="general-information-node-count"></span>
+            </li>
+            <li>
+              <span>#directed edges</span>
+              <span id="general-information-directed-edges-count"></span>
+            </li>
+            <li>
+              <span>#undirected edges</span>
+              <span id="general-information-undirected-edges-count"></span>
+            </li>
+          </ul>
+          <ul id="general-information-methods"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-group-vertical" role="group" aria-label="..." id="float-button-group">
+    <button type="button" class="btn btn-secondary" id="zoom-in" onclick="zoomStep(1.5)"><i
+      class="fa fa-search-plus icon-size" aria-hidden="true"></i></button>
+    <button type="button" class="btn btn-secondary" id="zoom-out" onclick="zoomStep(0.5)"><i
+      class="fa fa-search-minus icon-size" aria-hidden="true"></i></button>
+    <button type="button" class="btn btn-secondary" id="reset" onclick="zoomFit(500)"><i
+      class="fa fa-crosshairs icon-size" aria-hidden="true"></i></button>
+  </div>
+</div>
+
+<script type="text/javascript">
+  let js_chart = document.getElementById("js_chart");
+
+</script>
+</body>
+
+<div *ngIf="!isLoaded" class="wrapper">
+  <div class="overlay">
+    <div class="spinner-wrapper">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoaded && !projectsAvailable" class="wrapper">
+  <div class="container-fluid p-4">
+    <div class="d-sm-flex align-items-center mb-4">
+      <h3 class="text-secondary">You have to add a project!</h3>
+    </div>
+    <button class="btn btn-success shadow-sm"
+    (click)="createProject()">
+      Add project</button>
+  </div>
+</div>

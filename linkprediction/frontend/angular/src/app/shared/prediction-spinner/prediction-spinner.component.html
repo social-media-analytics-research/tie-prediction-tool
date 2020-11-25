@@ -1,0 +1,41 @@
+<div class="container-fluid p-4">
+    <div class="p-2">
+        <div class="card shadow m-5" style="width: 25rem;">
+
+            <div class="card-header p-2">
+                <div class="d-flex align-items-center">
+                    <h6 class="font-weight-bold text-uppercase mr-auto">Predicting Links</h6>
+                </div>
+            </div>
+    
+            <div class="card-body p-3 mb-1 bg-white">
+
+                <div class="row mt-4">
+                    <div class="col d-flex justify-content-center">
+                        <div class="spinner-border text-primary" style="width: 7rem; height: 7rem;" role="status"></div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col d-flex justify-content-center">
+                        <p class="h5 font-weight-bold test-gray-800">{{predictionProgressMessage || ''}}</p>
+                    </div>
+                </div>
+
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-center mt-1">
+                        <p class="h5 font-weight-bold test-gray-800">{{predictionStepMessage || 'Unknown'}}</p>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col d-flex justify-content-center">
+                        <button class="btn btn-danger shadow-sm "
+                        (click)="abortPrediction()">
+                          <i class="fas fa-times"></i> 
+                          Abort</button>
+                    </div>
+                </div>
+
+            </div>
+</div>

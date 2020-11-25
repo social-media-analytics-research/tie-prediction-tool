@@ -1,0 +1,676 @@
+openapi: 3.0.1
+info:
+  description: Social-Network-Analysis Link Prediction Tool.
+  title: SNA Link Prediction
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api/
+tags:
+- description: Operations about projects.
+  name: projects
+- description: Operations about networks.
+  name: networks
+- description: Operations about predictions.
+  name: prediction
+paths:
+  /projects:
+    get:
+      description: Get all projects as array
+      operationId: get_projects
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Project'
+                type: array
+          description: Array of projects
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Returns a list of available projects.
+      tags:
+      - projects
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.projects_controller
+    post:
+      description: Creates a project with network
+      operationId: create_project
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectSetup'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: Created project
+        "403":
+          content: {}
+          description: Forbidden
+        "405":
+          content: {}
+          description: Invalid input
+      summary: Creates a project with network.
+      tags:
+      - projects
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.projects_controller
+  /projects/{project_id}:
+    delete:
+      description: Deletes a project by id
+      operationId: delete_project_by_id
+      parameters:
+      - description: ID of current project
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content: {}
+          description: Success
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Project not found
+      summary: Delete project by ID
+      tags:
+      - projects
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.projects_controller
+    get:
+      description: Returns a project by id
+      operationId: get_project_by_id
+      parameters:
+      - description: ID of project to return
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: Successful operation
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Project not found
+      summary: Find project by ID
+      tags:
+      - projects
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.projects_controller
+  /projects/{project_id}/originalnetwork:
+    delete:
+      description: Deletes original network of project
+      operationId: delete_original_network
+      parameters:
+      - description: ID of current project
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content: {}
+          description: Success
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Original network not found
+      summary: Delete original network of project
+      tags:
+      - networks
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.networks_controller
+    get:
+      description: Returns the original network
+      operationId: get_original_network_by_project
+      parameters:
+      - description: ID of current project
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OriginalNetwork'
+          description: Successful operation
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Original network not found
+      summary: Find original network by project id
+      tags:
+      - networks
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.networks_controller
+  /projects/{project_id}/predictednetwork:
+    delete:
+      description: Deletes predicted network of project
+      operationId: delete_predicted_network
+      parameters:
+      - description: ID of current project
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content: {}
+          description: Success
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Predicted network not found
+      summary: Delete predicted network of project
+      tags:
+      - networks
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.networks_controller
+    get:
+      description: Returns the predicted network
+      operationId: get_predicted_network_by_project
+      parameters:
+      - description: ID of current project
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictedNetwork'
+          description: Successful operation
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Predicted network not found
+      summary: Find predicted network by project id
+      tags:
+      - networks
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.networks_controller
+  /projects/{project_id}/prediction:
+    get:
+      description: Returns the prediction state
+      operationId: get_prediction_state_by_project
+      parameters:
+      - description: ID of current project
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionStatus'
+          description: Successful operation
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Prediction not found
+      summary: Find prediction status by project id
+      tags:
+      - prediction
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.prediction_controller
+    put:
+      description: Handles the prediction state
+      operationId: handle_prediction_state_by_project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictionState'
+        required: true
+      parameters:
+      - description: ID of current project
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionStatus'
+          description: Successful operation
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Prediction state transition failed
+      summary: Handles the state of the prediction
+      tags:
+      - prediction
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.prediction_controller
+  /projects/{project_id}/predictionfeatures:
+    delete:
+      description: Deletes selected prediction features of project
+      operationId: delete_prediction_features
+      parameters:
+      - description: ID of current project
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content: {}
+          description: Success
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Selected prediction features not found
+      summary: Delete selected prediction features of project
+      tags:
+      - prediction
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.prediction_controller
+    get:
+      description: Returns the prediction features
+      operationId: get_prediction_features_by_project
+      parameters:
+      - description: ID of current project
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionFeatures'
+          description: Successful operation
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Prediction features not found
+      summary: Find prediction features by project id
+      tags:
+      - prediction
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.prediction_controller
+    post:
+      description: Creates a prediction
+      operationId: create_prediction
+      parameters:
+      - description: ID of current project
+        explode: false
+        in: path
+        name: project_id
+        required: true
+        schema:
+          example: "1"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictionSetup'
+        required: true
+      responses:
+        "201":
+          content: {}
+          description: Created prediction
+        "403":
+          content: {}
+          description: Forbidden
+        "405":
+          content: {}
+          description: Invalid input
+      summary: Creates a prediction.
+      tags:
+      - prediction
+      x-openapi-router-controller: linkprediction.openapi_server.controllers.prediction_controller
+components:
+  schemas:
+    Project:
+      example:
+        original_network_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        description: Project about SNA.
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        designation: Network Analysis
+      properties:
+        id:
+          format: uuid
+          type: string
+        designation:
+          example: Network Analysis
+          type: string
+        description:
+          example: Project about SNA.
+          type: string
+        original_network_id:
+          format: uuid
+          type: string
+      required:
+      - description
+      - designation
+      - id
+      - original_network_id
+      type: object
+    ProjectSetup:
+      properties:
+        designation:
+          example: ExampleProject
+          type: string
+        description:
+          example: Project example description
+          type: string
+        network_designation:
+          example: ExampleGraph
+          type: string
+        network_directed:
+          example: true
+          type: boolean
+        network_multigraph:
+          example: true
+          type: boolean
+        standardFile:
+          description: File object which contains standard format file
+          format: binary
+          type: string
+        nodesFile:
+          description: File object which contains nodes format file
+          format: binary
+          type: string
+        edgesFile:
+          description: File object which contains edges format file
+          format: binary
+          type: string
+      required:
+      - description
+      - designation
+      - network_designation
+      - network_directed
+      - network_multigraph
+      type: object
+    OriginalNetwork:
+      example:
+        directed: true
+        edge_count: 68
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        designation: ExampleOriginalNetwork
+        node_count: 12
+        multigraph: true
+      properties:
+        id:
+          format: uuid
+          type: string
+        designation:
+          example: ExampleOriginalNetwork
+          type: string
+        directed:
+          example: true
+          type: boolean
+        multigraph:
+          example: true
+          type: boolean
+        node_count:
+          example: 12
+          type: integer
+        edge_count:
+          example: 68
+          type: integer
+      required:
+      - designation
+      - directed
+      - edge_count
+      - id
+      - multigraph
+      - node_count
+      type: object
+    PredictedNetwork:
+      example:
+        directed_edges_count: 56
+        nodes: '{}'
+        methods_applied: '{}'
+        edges: '{}'
+        node_count: 12
+        undirected_edges_count: 56
+      properties:
+        nodes:
+          type: object
+        edges:
+          type: object
+        node_count:
+          example: 12
+          type: integer
+        directed_edges_count:
+          example: 56
+          type: integer
+        undirected_edges_count:
+          example: 56
+          type: integer
+        methods_applied:
+          type: object
+      required:
+      - directed_edges_count
+      - edges
+      - methods_applied
+      - nodes
+      - node_count
+      - undirected_edges_count
+      type: object
+    PredictionFeatures:
+      example:
+        selected_prediction_features:
+        - feature_type: Jaccard
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          designation: ExamplePredictionFeature
+          parameters:
+          - '{}'
+          - '{}'
+        - feature_type: Jaccard
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          designation: ExamplePredictionFeature
+          parameters:
+          - '{}'
+          - '{}'
+        available_prediction_features:
+        - feature_type: Jaccard
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          designation: ExamplePredictionFeature
+          parameters:
+          - '{}'
+          - '{}'
+        - feature_type: Jaccard
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          designation: ExamplePredictionFeature
+          parameters:
+          - '{}'
+          - '{}'
+      properties:
+        available_prediction_features:
+          items:
+            $ref: '#/components/schemas/PredictionFeature'
+          type: array
+        selected_prediction_features:
+          items:
+            $ref: '#/components/schemas/PredictionFeature'
+          type: array
+      required:
+      - available_prediction_features
+      type: object
+    PredictionSetup:
+      example:
+        selected_prediction_features:
+        - feature_type: Jaccard
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          designation: ExamplePredictionFeature
+          parameters:
+          - '{}'
+          - '{}'
+        - feature_type: Jaccard
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          designation: ExamplePredictionFeature
+          parameters:
+          - '{}'
+          - '{}'
+      properties:
+        selected_prediction_features:
+          items:
+            $ref: '#/components/schemas/PredictionFeature'
+          type: array
+      required:
+      - selected_prediction_features
+      type: object
+    PredictionFeature:
+      example:
+        feature_type: Jaccard
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        designation: ExamplePredictionFeature
+        parameters:
+        - '{}'
+        - '{}'
+      properties:
+        id:
+          format: uuid
+          type: string
+        designation:
+          example: ExamplePredictionFeature
+          type: string
+        feature_type:
+          example: Jaccard
+          type: string
+        parameters:
+          items:
+            type: object
+          type: array
+      required:
+      - designation
+      - feature_type
+      - id
+      type: object
+    PredictionState:
+      example:
+        state: Executing
+      properties:
+        state:
+          enum:
+          - Start
+          - Abort
+          example: Executing
+          type: string
+      required:
+      - state
+      type: object
+    PredictionStatus:
+      example:
+        progress:
+        - designation: Jaccard
+          state: Processing
+        - designation: Jaccard
+          state: Processing
+        state: Finished
+        timestamp: 20.02.2020
+      properties:
+        state:
+          enum:
+          - Waiting
+          - Processing
+          - Finished
+          - Failed
+          example: Finished
+          type: string
+        timestamp:
+          example: 20.02.2020
+          type: string
+        progress:
+          items:
+            $ref: '#/components/schemas/PredictionStep'
+          type: array
+      required:
+      - progress
+      - state
+      - timestamp
+      type: object
+    PredictionStep:
+      example:
+        designation: Jaccard
+        state: Processing
+      properties:
+        designation:
+          example: Jaccard
+          type: string
+        state:
+          enum:
+          - Waiting
+          - Processing
+          - Finished
+          - Failed
+          example: Processing
+          type: string
+      required:
+      - designation
+      - state
+      type: object

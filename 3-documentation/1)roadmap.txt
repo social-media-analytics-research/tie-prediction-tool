@@ -1,0 +1,8 @@
+- Next features (for the next version):
+ - Evaluate PyPy (https://www.pypy.org/) and Pyston (https://blog.pyston.org/) in order to increase velocity.
+ - Evaluate Skorch (https://skorch.readthedocs.io/en/stable/index.html) in order to add deep learning approaches.
+ - Add further prediction approaches and configuration parameters.
+ - Tweak visualization settings to further increase velocity.
+
+- Bugs to resolve:
+  -
