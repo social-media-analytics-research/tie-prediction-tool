@@ -1,0 +1,151 @@
+#1 Load neccessray Libraries
+install.packages("igraph")
+install.packages("linkprediction")
+install.packages("dplyr")
+install.packages("ROCR")
+library(igraph)
+library(linkprediction)
+library(dplyr)
+library(ROCR)
+
+#2 Load graphml network
+uci <- read_graph("graphml-networks/uci-1899-directed.graphml", "graphml")
+
+#3 Create random tie removal function that keeps giant component (for the test dataset)
+remove.edges.test <- function(g, n) {
+  num.tries <- 0
+  while (gsize(g) > 19280) {
+    num.tries <- num.tries + 1
+    g2 <- delete.edges(g, E(g)[sample(seq_along(E(g)), n)])
+    if (no.clusters(g2) == no.clusters(g)) {
+      print(paste("Total number of tries and remaining ties:", num.tries, gsize(g2)))
+      return(g2)
+    }
+  }
+  return (g)
+}
+
+#4 Generate test network while keeping giant component (randomly remove 5 percent of edges (=1015) from uci with 20296 ties, resulting in 19280 ties)
+uci_test <- uci
+repeat{
+       uci_test <- remove.edges.test(uci_test, 1)
+       Sys.sleep(0.0001)
+       if(gsize(uci_test) == 19280){
+       break
+      }
+      }
+uci_test
+#Should lead to 19280 edges
+
+#5 Create random tie removal function that keeps giant component (for the train dataset)
+remove.edges.train <- function(g, n) {
+  num.tries <- 0
+  while (gsize(g) > 15424) {
+    num.tries <- num.tries + 1
+    g2 <- delete.edges(g, E(g)[sample(seq_along(E(g)), n)])
+    if (no.clusters(g2) == no.clusters(g)) {
+      print(paste("Total number of tries and remaining ties:", num.tries, gsize(g2)))
+      return(g2)
+    }
+  }
+  return (g)
+}
+
+#6 Generate train network while keeping giant component (randomly remove 20 percent of edges (=3856) from uci_test with 19280 ties, resulting in 15424 ties)
+uci_train <- uci_test
+repeat{
+       uci_train <- remove.edges.train(uci_train, 1)
+       Sys.sleep(0.0001)
+       if(gsize(uci_train) == 15424){
+       break
+      }
+      }
+uci_train
+#Should lead to 15424 edges
+
+#7 Transform to undirected network
+uci_test <- as.undirected (uci_test)
+uci_train <- as.undirected (uci_train)
+
+#8 Calculate adamic-adar scores for each pair of actors in uci_test
+aa_test <- proxfun(uci_test,method = "aa", value= "edgelist") %>% filter(from < to) %>% rename(aa = value)
+
+#9 Calculate adamic-adar scores for each pair of actors in uci_train
+aa_train <- proxfun(uci_train,method = "aa", value= "edgelist") %>% filter(from < to) %>% rename(aa = value)
+
+#10 Create dyadic columns of each actor pair and check result
+testdf <- tidyr::crossing(from = seq(1, vcount(uci_train)),to = seq(1, vcount(uci_train))) %>% filter(from < to) 
+testdf
+
+#from to
+#1    2 
+#1    3  
+
+#11 Append training column to dyadic colums (left join) and check result
+testdf <- testdf %>% left_join(igraph::as_data_frame(uci_train, what="edges") %>% as_tibble(), by = c("from", "to"))
+testdf
+
+#from to weight
+#1    2  0 	   
+#1    3  0
+
+#12 Append test column to dyadic colums (left join) and check result
+testdf <- testdf %>% left_join(igraph::as_data_frame(uci_test, what="edges") %>% as_tibble(), by = c("from", "to"))
+testdf
+
+#from to weight.x weight.y
+#1    2  0        0	   
+#1    3  0        0
+
+#13 Convert numerical dataframe to logical dataframe and set TRUE/FALSE
+testdf <- testdf %>% mutate_at(c("weight.x"),as.logical)
+testdf <- testdf %>% mutate_at(c("weight.y"),as.logical)
+testdf[is.na(testdf)] <- FALSE
+
+#from to weight.x weight.y
+#1    2  FALSE    FALSE	   
+#1    3  FALSE    FALSE
+
+#14 Rename dataframe columns to "ucitrain" and "ucitest"
+testdf <- testdf %>% rename(ucitrain = weight.x,ucitest = weight.y)
+
+#from to ucitrain ucitest
+#1    2  FALSE    FALSE	   
+#1    3  FALSE    FALSE
+
+#15 Append transition column to logical dataframe
+testdf <- testdf %>% mutate( test = ucitest & !ucitrain)
+
+#from to ucitrain ucitest test
+#1    2  FALSE    FALSE	  FALSE  
+#1    3  FALSE    FALSE   FALSE
+
+#16 Append adamic-adar index scores column (left join)
+testdf <- testdf %>% left_join(aa_train, by=c("from", "to"))
+
+#from to ucitrain ucitest test   aa
+#1    2  FALSE    FALSE	  FALSE  378
+#1    3  FALSE    FALSE   FALSE  588 
+
+#17 Format aa-values
+testdf <- testdf %>% mutate_at(c("aa"),funs(ifelse(is.na(.), 0, .)))
+
+#18 Create prediction parameters
+predict <- prediction(testdf$aa,testdf$test)
+
+#19 Create performance parameters
+perform_roc <- performance(predict, "tpr","fpr")
+perform_auc <- performance(predict, measure = "auc")
+
+#20 Create ROC curve 
+plot(perform_roc)
+
+#21 Extract AUC value
+perform_auc@y.values
+_______________________
+
+AUC: 0,77
+(Tool: 0,80) 
+
+
+

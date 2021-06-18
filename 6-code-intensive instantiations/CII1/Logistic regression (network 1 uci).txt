@@ -1,0 +1,128 @@
+#1 Load neccessray Libraries
+install.packages("igraph")
+install.packages("linkprediction")
+install.packages("dplyr")
+install.packages("ROCR")
+install.packages("ISLR")
+library(igraph)
+library(linkprediction)
+library(dplyr)
+library(ROCR)
+library(ISLR)
+
+#2 Load graphml network
+uci <- read_graph("graphml-networks/uci-1899-directed.graphml", "graphml")
+
+#3 Create random tie removal function that keeps giant component (for the test dataset)
+remove.edges.test <- function(g, n) {
+  num.tries <- 0
+  while (gsize(g) > 19280) {
+    num.tries <- num.tries + 1
+    g2 <- delete.edges(g, E(g)[sample(seq_along(E(g)), n)])
+    if (no.clusters(g2) == no.clusters(g)) {
+      print(paste("Total number of tries and remaining ties:", num.tries, gsize(g2)))
+      return(g2)
+    }
+  }
+  return (g)
+}
+
+#4 Generate test network while keeping giant component (randomly remove 5 percent of edges (=1015) from uci with 20296 ties, resulting in 19280 ties)
+uci_test <- uci
+repeat{
+       uci_test <- remove.edges.test(uci_test, 1)
+       Sys.sleep(0.0001)
+       if(gsize(uci_test) == 19280){
+       break
+      }
+      }
+uci_test
+#Should lead to 19280 edges
+
+#5 Create random tie removal function that keeps giant component (for the train dataset)
+remove.edges.train <- function(g, n) {
+  num.tries <- 0
+  while (gsize(g) > 15424) {
+    num.tries <- num.tries + 1
+    g2 <- delete.edges(g, E(g)[sample(seq_along(E(g)), n)])
+    if (no.clusters(g2) == no.clusters(g)) {
+      print(paste("Total number of tries and remaining ties:", num.tries, gsize(g2)))
+      return(g2)
+    }
+  }
+  return (g)
+}
+
+#6 Generate train network while keeping giant component (randomly remove 20 percent of edges (=3856) from uci_test with 19280 ties, resulting in 15424 ties)
+uci_train <- uci_test
+repeat{
+       uci_train <- remove.edges.train(uci_train, 1)
+       Sys.sleep(0.0001)
+       if(gsize(uci_train) == 15424){
+       break
+      }
+      }
+uci_train
+#Should lead to 15424 edges
+
+#7 Transform to undirected network
+uci_test <- as.undirected (uci_test)
+uci_train <- as.undirected (uci_train)
+
+#8 Calculate preferential attachment and jaccard scores for each pair of actors in uci_test
+pa_test <- proxfun(uci_test,method = "pa", value= "edgelist") %>% filter(from < to) %>% rename(pa = value)
+jc_test <- proxfun(uci_test,method = "jaccard", value= "edgelist") %>% filter(from < to) %>% rename(jc = value)
+
+#9 Calculate preferential attachment and jaccard scores for each pair of actors in uci_train
+pa_train <- proxfun(uci_train,method = "pa", value= "edgelist") %>% filter(from < to) %>% rename(pa = value)
+jc_train <- proxfun(uci_train,method = "jaccard", value= "edgelist") %>% filter(from < to) %>% rename(jc = value)
+
+#10 Create dyadic columns of each actor pair in the train dataset and check result
+traindf <- tidyr::crossing(from = seq(1, vcount(uci_train)),to = seq(1, vcount(uci_train))) %>% filter(from < to) 
+traindf  
+
+#11 Create dyadic columns of each actor pair in the test dataset and check result
+testdf <- tidyr::crossing(from = seq(1, vcount(uci_test)),to = seq(1, vcount(uci_test))) %>% filter(from < to) 
+testdf  
+
+#12 Append preferential attachment and jaccard index scores column to training and test datasets (left join)
+traindf <- traindf %>% left_join(pa_train, by=c("from", "to"))
+testdf <- testdf %>% left_join(pa_test, by=c("from", "to"))
+traindf <- traindf %>% left_join(jc_train, by=c("from", "to"))
+testdf <- testdf %>% left_join(jc_test, by=c("from", "to"))
+
+#13 Format aa and jc values
+traindf <- traindf %>% mutate_at(c("pa","jc"),funs(ifelse(is.na(.), 0, .)))
+testdf <- testdf %>% mutate_at(c("pa","jc"),funs(ifelse(is.na(.), 0, .)))
+
+#14 Manually append mutual tie indicators (see gephi, the uci network has no mutual ties)
+# Can be skipped, the uci network has no mutual ties
+
+#15 Is there a tie present or not (only the training data should encompass this information)?
+traindf <- traindf %>% left_join(igraph::as_data_frame(uci_train, what="edges") %>% as_tibble(), by = c("from", "to"))
+traindf <- traindf %>% mutate_at(c("weight"),as.logical)
+traindf <- traindf %>% rename(tie = weight)
+traindf[is.na(traindf)] <- FALSE
+
+testdf <- testdf  %>% left_join(igraph::as_data_frame(uci_train, what="edges") %>% as_tibble(), by = c("from", "to"))
+testdf <- testdf  %>% mutate_at(c("weight"),as.logical)
+testdf <- testdf  %>% rename(tie = weight)
+testdf [is.na(testdf)] <- FALSE
+
+#16 Create and train logistic regression model with training data (remember that mutual can be skipped)
+lrm <- glm(tie ~ pa + jc, data = traindf, family = binomial(link="logit"))
+
+#17 Test model accuracy and derive ROC/AUC
+res = predict(lrm,testdf, type = "response")
+pred <- prediction(res,testdf$tie)
+performance_roc <- performance(pred, measure = "tpr", x.measure = "fpr")   
+performance_auc <- performance(pred, measure = "auc")
+plot(performance_roc)
+performance_auc@y.values
+_______________________
+
+AUC: 0,91
+(Tool: 0,91)
+
+
+
